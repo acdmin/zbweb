@@ -56,7 +56,7 @@
 			</view>
 		</view>
 		<goHome />
-		<timeUpdate v-if="$store.state.autoJumpTimer&&autoJumpTimeCount>0" />
+		<timeUpdate v-if="$store.state.autoJumpTimer&&autoJumpTimeCount>=0" />
 		<img class="star star1" src="~@/static/images/star1.png" alt="">
 		<img class="star star2" src="~@/static/images/star2.png" alt="">
 		<img class="fs" src="~@/static/images/fs.png" alt="">
@@ -575,11 +575,11 @@
 							width: 150px;
 							height: 278px;
 							&.inversion {
-								-webkit-transform: rotateY(180deg);
-								-moz-transform: rotateY(180deg);
-								-ms-transform: rotateY(180deg);
-								-o-transform: rotateY(180deg);
-								transform: rotateY(180deg);
+								-webkit-transform: rotateX(180deg);
+								-moz-transform: rotateX(180deg);
+								-ms-transform: rotateX(180deg);
+								-o-transform: rotateX(180deg);
+								transform: rotateX(180deg);
 							}
 						}
 					}

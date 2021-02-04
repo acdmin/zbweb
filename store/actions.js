@@ -14,30 +14,41 @@ export const actions = {
 		})
 		// uni.hideLoading();
 		if(data.status_code == 200){
-			let _item = {
-				id: data.data.id,
-				seconds: new Date().getTime() + 1800000
-			}
-			localStorage.removeItem('detail_data');
-			localStorage.setItem('detail_data', JSON.stringify(_item));
+			let detail_data = {endtime: data.data.endtime}
+			localStorage.setItem('detail_data', JSON.stringify(detail_data));
 			content.state.detail = data.data
-			content.state.autoJumpTimeCount = 30
-			content.state.autoJumpTimer = null
-			clearInterval(content.state.autoJumpTimer)
 			content.state.autoJumpTimer = setInterval(() => {
-				content.state.autoJumpTimeCount--;
 				if( content.state.autoJumpTimeCount == 0 ){
-					content.state.autoJumpTimer = null
 					clearInterval(content.state.autoJumpTimer)
+					content.state.autoJumpTimer = null
+					content.state.autoJumpTimeCount = 30
 					uni.redirectTo({
 						url: '/pages/detail/detail?id=' + data.data.id
 					})
+				}else{
+					content.state.autoJumpTimeCount--;
 				}
 			}, 1000)
 		}else{
 			uni.showToast({title: data.message, icon: "none"})
 		}
     },
+	// 订单支付完成弹窗
+	async feedback(content, payload){
+		let {data} = await $http({
+			url: '/feedback',
+			method: 'POST',
+			showToast: true,
+			header: {
+				'Authorization': `Bearer ${this.state.api_token}`
+			},
+			data: {did: payload.id,phone: payload.phone,wechat: payload.wechat,remark: payload.remark,sex: payload.sex}
+		})
+		if( data.status_code == 200 ){
+			uni.showToast({title: data.message, icon: "none"})
+			payload.callback&&payload.callback()
+		}
+	},
 	// 占卜完整详情
 	async getFullDetail(content, payload){
 	    let {data} = await $http({
@@ -53,10 +64,23 @@ export const actions = {
 				url: '/pages/index/index'
 			})
 		}else{
+			let detail_data = {endtime: data.data.endtime}
+			localStorage.setItem('detail_data', JSON.stringify(detail_data));
+			content.state.detail = data.data
+			content.state.autoJumpTimeCount = 30
+			content.state.autoJumpTimer = null
+			clearInterval(content.state.autoJumpTimer)
+			content.state.autoJumpTimer = setInterval(() => {
+				content.state.autoJumpTimeCount--;
+				if( content.state.autoJumpTimeCount == 0 ){
+					content.state.autoJumpTimer = null
+					clearInterval(content.state.autoJumpTimer)
+				}
+			}, 1000)
+			
 			content.state.detail = {
-				price: data.data.price,
 				list: data.data.list,
-				project: data.data.project,
+				popupwindow: data.data.popupwindow,
 				has_pay: data.data.state*1
 			}
 		}

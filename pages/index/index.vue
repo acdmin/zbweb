@@ -52,6 +52,9 @@
 		onShow(){
 			this.id = -1
 			this.$store.state.detail = null
+			clearInterval(this.$store.state.autoJumpTimer)
+			this.$store.state.autoJumpTimer = null
+			this.$store.state.autoJumpTimeCount = 30
 			this.$store.state.chosed_three_card = []
 		},
 		methods: {

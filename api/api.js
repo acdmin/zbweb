@@ -1,7 +1,7 @@
 const _env = 'production' // production
 const BASE_URL = (_env == 'development' ? 'http://szylfy.oicp.net:9999/api' : 'https://zp.yilianfy.com/api');
 export const $http = (options) => {
-	if(!!options._showToast){
+	if(!!options.showToast){
 		uni.showLoading({
 			title:'加载中...'
 		})
@@ -13,7 +13,7 @@ export const $http = (options) => {
 			header: options.header || {},
 			data: options.data || {},
 			success: (res) => {
-				if(!!options._showToast){
+				if(!!options.showToast){
 					uni.hideLoading()
 				}
 				uni.stopPullDownRefresh()
@@ -30,7 +30,7 @@ export const $http = (options) => {
 				}
 			},
 			fail: (err) => {
-				if(!!options._showToast){
+				if(!!options.showToast){
 					uni.hideLoading()
 				}
 				uni.stopPullDownRefresh()

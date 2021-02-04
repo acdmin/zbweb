@@ -11,6 +11,10 @@
 		},
 		methods: {
 			goHome(){
+				this.$store.state.detail = null
+				clearInterval(this.$store.state.autoJumpTimer)
+				this.$store.state.autoJumpTimer = null
+				this.$store.state.autoJumpTimeCount = 30
 				uni.redirectTo({
 					url: '/pages/index/index'
 				})

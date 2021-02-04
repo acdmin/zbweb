@@ -10,6 +10,7 @@
 				<view class="inner">
 					<view class="pay-ltem" :class="{'active': payIndex==0}" v-if="!!payWays[0]" @click="setPay(0)" style="margin-top: 20px;">
 						<img src="../../static/images/detail/pay-text.png" alt="">
+						<view style="font-size: 20px;color: #ffed27;text-align: center;margin-bottom: 10px;">(加赠留言占卜一次)</view>
 						<view>
 							<view style="font-size: 26px; color: #ffa1fc;">RMB {{payWays[0].price}}</view>
 						</view>
@@ -69,6 +70,7 @@
 			</template>
 		</view>
 		<goHome />
+		<feedBack :id="id" v-if="detail&&detail.popupwindow" />
 	</view>
 </template>
 
@@ -76,6 +78,7 @@
 	import { mapActions, mapGetters } from 'vuex';
 	import {timeCountDown, secondsToTime,fileZero} from '@/static/js/utils'
 	import goHome from '@/components/goHome'
+	import feedBack from '@/components/feedBack'
 	export default {
 		data() {
 			return {
@@ -83,11 +86,13 @@
 				countNum: 1800,
 				payIndex: 1,
 				time: [],
-				timer: null
+				timer: null,
+				feedback: true
 			}
 		},
 		components: {
-			goHome
+			goHome,
+			feedBack
 		},
 		watch: {
 			'detail': function(){
@@ -95,10 +100,10 @@
 					clearInterval(this.timer)
 					this.timer = null
 					let start = JSON.parse(localStorage.getItem('detail_data')),
-						now = new Date().getTime(),
-						go_seconds = Math.floor((start.seconds-now)/1000);
+						now = Math.floor(Date.now()/1000),
+						go_seconds = Math.floor((start.endtime-now));
 					if(go_seconds > 0){
-						this.countNum = go_seconds
+						this.countNum = go_seconds > 1800 ? 1800 : go_seconds;
 						this.timer = timeCountDown(this.countNum, (num) => {
 							if( num == 0 ){
 								clearInterval(this.timer)
@@ -124,10 +129,12 @@
 		onLoad(){
 			this.id = this.$route.query.id
 			this.$store.dispatch('payWays')
+			uni.$on('close_feedback', () => {this.detail.popupwindow=false})
 		},
 		onShow(){
-			this.$store.state.autoJumpTimer = null
 			clearInterval(this.$store.state.autoJumpTimer)
+			this.$store.state.autoJumpTimer = null
+			this.$store.state.autoJumpTimeCount = 30
 			this.$store.dispatch('getFullDetail', {
 				id: this.id
 			})
