@@ -1,7 +1,7 @@
 <template>
 	<view class="detail">
 		<view class="top">
-			<img src="../../static/images/detail/title-1.png" />
+			<img :src="`../../static/images/detail/title-${detail.questionid}.png`" v-if="detail" />
 			<view class="sub-title"><text selectable>您抽到的每一张牌都与您的问题息息相关，接下来，我们将透过您锁选择的3张牌，告诉您问题的答案。</text></view>
 		</view>
 		<view class="items">
@@ -71,6 +71,7 @@
 		</view>
 		<goHome />
 		<feedBack :id="id" v-if="detail&&detail.popupwindow" />
+		<CodePanel />
 	</view>
 </template>
 
@@ -79,6 +80,7 @@
 	import {timeCountDown, secondsToTime,fileZero} from '@/static/js/utils'
 	import goHome from '@/components/goHome'
 	import feedBack from '@/components/feedBack'
+	import CodePanel from '@/components/CodePanel'
 	export default {
 		data() {
 			return {
@@ -92,7 +94,8 @@
 		},
 		components: {
 			goHome,
-			feedBack
+			feedBack,
+			CodePanel
 		},
 		watch: {
 			'detail': function(){
@@ -167,8 +170,8 @@
 					})
 					return
 				}
-				this.$store.state.autoJumpTimer = null
 				clearInterval(this.$store.state.autoJumpTimer)
+				this.$store.state.autoJumpTimer = null
 				uni.navigateTo({
 					url: `/pages/wxpay/wxpay?id=${this.id}&out_trade_no=${data.data.sn}`
 				})

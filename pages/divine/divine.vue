@@ -56,7 +56,8 @@
 			</view>
 		</view>
 		<goHome />
-		<timeUpdate v-if="$store.state.autoJumpTimer&&autoJumpTimeCount>=0" />
+		<CodePanel />
+		<timeUpdate v-if="autoJumpTimer&&autoJumpTimeCount>=0" />
 		<img class="star star1" src="~@/static/images/star1.png" alt="">
 		<img class="star star2" src="~@/static/images/star2.png" alt="">
 		<img class="fs" src="~@/static/images/fs.png" alt="">
@@ -70,10 +71,12 @@
 	import { mapActions, mapGetters } from 'vuex';
 	import goHome from '@/components/goHome'
 	import timeUpdate from '@/components/timeUpdate'
+	import CodePanel from '@/components/CodePanel'
 	export default {
 		name: "divine",
 		components: {
 			goHome,
+			CodePanel,
 			timeUpdate
 		},
 		data() {
@@ -151,8 +154,8 @@
 			screenHandle(){
 				if(this.detail){
 					document.body.removeEventListener('click', this.screenHandle)
-					this.$store.state.autoJumpTimer = null
 					clearInterval(this.$store.state.autoJumpTimer)
+					this.$store.state.autoJumpTimer = null
 					uni.redirectTo({
 						url: '/pages/detail/detail?id=' + this.detail.id
 					})
@@ -339,7 +342,8 @@
 				chosed_three_card: 'getChosed_three_card',
 				detail: 'getDetail',
 				role_type: 'getRoleType',
-				autoJumpTimeCount: 'getAutoJumpTimeCount'
+				autoJumpTimeCount: 'getAutoJumpTimeCount',
+				autoJumpTimer: 'getAutoJumpTimer'
 			})
 		}
 	}

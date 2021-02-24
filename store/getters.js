@@ -39,4 +39,7 @@ export const getters = {
 	getAutoJumpTimeCount(state){
 		return state.autoJumpTimeCount
 	},
+	getAutoJumpTimer(state){
+		return state.autoJumpTimer
+	}
 }

@@ -32,12 +32,15 @@
 				<view class="btn sure" @click="onSelect"><text></text></view>
 			</view>
 		</view>
+		<CodePanel />
 	</view>
 </template>
 
 <script>
 	import { mapActions, mapGetters } from 'vuex';
+	import CodePanel from '@/components/CodePanel.vue'
 	export default {
+		components: {CodePanel},
 		data() {
 			return {
 				id: -1
@@ -52,9 +55,7 @@
 		onShow(){
 			this.id = -1
 			this.$store.state.detail = null
-			clearInterval(this.$store.state.autoJumpTimer)
-			this.$store.state.autoJumpTimer = null
-			this.$store.state.autoJumpTimeCount = 30
+			if(this.$store.state.autoJumpTimer)clearInterval(this.$store.state.autoJumpTimer)
 			this.$store.state.chosed_three_card = []
 		},
 		methods: {

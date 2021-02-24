@@ -17,11 +17,14 @@ export const actions = {
 			let detail_data = {endtime: data.data.endtime}
 			localStorage.setItem('detail_data', JSON.stringify(detail_data));
 			content.state.detail = data.data
+			if(content.state.autoJumpTimer)clearInterval(content.state.autoJumpTimer)
+			content.state.autoJumpTimer = null
+			content.state.autoJumpTimeCount = 30
 			content.state.autoJumpTimer = setInterval(() => {
 				if( content.state.autoJumpTimeCount == 0 ){
 					clearInterval(content.state.autoJumpTimer)
 					content.state.autoJumpTimer = null
-					content.state.autoJumpTimeCount = 30
+					content.state.autoJumpTimeCount = 0
 					uni.redirectTo({
 						url: '/pages/detail/detail?id=' + data.data.id
 					})
@@ -67,20 +70,18 @@ export const actions = {
 			let detail_data = {endtime: data.data.endtime}
 			localStorage.setItem('detail_data', JSON.stringify(detail_data));
 			content.state.detail = data.data
-			content.state.autoJumpTimeCount = 30
-			content.state.autoJumpTimer = null
-			clearInterval(content.state.autoJumpTimer)
-			content.state.autoJumpTimer = setInterval(() => {
-				content.state.autoJumpTimeCount--;
-				if( content.state.autoJumpTimeCount == 0 ){
-					content.state.autoJumpTimer = null
-					clearInterval(content.state.autoJumpTimer)
-				}
-			}, 1000)
+			// content.state.autoJumpTimer = setInterval(() => {
+			// 	content.state.autoJumpTimeCount--;
+			// 	if( content.state.autoJumpTimeCount == 0 ){
+			// 		content.state.autoJumpTimer = null
+			// 		clearInterval(content.state.autoJumpTimer)
+			// 	}
+			// }, 1000)
 			
 			content.state.detail = {
 				list: data.data.list,
 				popupwindow: data.data.popupwindow,
+				questionid: data.data.questionid,
 				has_pay: data.data.state*1
 			}
 		}
