@@ -38,7 +38,7 @@
 
 <script>
 	import { mapActions, mapGetters } from 'vuex';
-	import CodePanel from '@/components/CodePanel.vue'
+	import CodePanel from '@/components/CodePanel'
 	export default {
 		components: {CodePanel},
 		data() {
